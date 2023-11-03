@@ -4,24 +4,20 @@
 
 void ListCtor (List* list)
 {
-    list->data = (Elem_list*)calloc (size, sizeof (Elem_list));
-    list->data[0] = POISON;
-    list->next = (Elem_list*)calloc (size, sizeof (Elem_list));
-    list->next[0] = POISON;
-    list->prev = (Elem_list*)calloc (size, sizeof (Elem_list));
-    list->prev[0] = POISON;
+    list->list_elem = (ListNode*)calloc (size, sizeof (ListNode)); // создали массив структур
+    list->list_elem[0].data = POISON;
+    list->list_elem[0].next = POISON;
+    list->list_elem[0].prev = POISON;
     for (int i = 1; i < size; i++)
     {
-        list->next[i] = FREE;
-        list->prev[i] = FREE;
+        list->list_elem[i].next = FREE;
+        list->list_elem[i].prev = FREE;
     }
 }
 
 void ListDtor (List* list)
 {
-    free (list->data);
-    free (list->next);
-    free (list->prev);
+    free (list->list_elem);
     free (list);
 }
 
@@ -36,41 +32,41 @@ void ListDump (List* list)
     printf ("DATA: ");
     for (int i = 0; i < size; i++)
     {
-        printf ("%3d ", list->data[i]);
+        printf ("%3d ", list->list_elem[i].data);
     }
     printf ("\n");
     printf ("NEXT: ");
     for (int i = 0; i < size; i++)
     {
-        printf ("%3d ", list->next[i]);
+        printf ("%3d ", list->list_elem[i].next);
     }
     printf ("\n");
     printf ("PREV: ");
     for (int i = 0; i < size; i++)
     {
-        printf ("%3d ", list->prev[i]);
+        printf ("%3d ", list->list_elem[i].prev);
     }
     printf ("\n");
 }
 
 
-void ListPush (List* list, Elem_list num, size_t place)
+void ListInsert (List* list, Elem_list num, size_t place)
 {
     int i = 0;
-    for (; list->next[i] != FREE; i++)
+    for (; list->list_elem[i].next != FREE; i++)
         ;
-    list->data[i] = num;
-    list->next[i] = place + 1;
-    list->next[place] = i;
-    list->prev[place + 1] = i;
-    list->prev[i] = place;
+    list->list_elem[i].data = num;
+    list->list_elem[i].next = place + 1;
+    list->list_elem[place].next = i;
+    list->list_elem[place + 1].prev = i;
+    list->list_elem[i].prev = place;
 }
 
 void ListDel (List* list, size_t place)
 {
-    list->data[list->next[place - 2]] = 0;
-    list->next[place - 2] = list->next[place - 1];
-    list->next[place - 1] = FREE;
-    list->prev[place] = list->prev[place - 1];
-    list->prev[place - 1] = FREE;
+    list->list_elem[list->list_elem[place - 2].next].data = 0;
+    list->list_elem[place - 2].next = list->list_elem[place - 1].next;
+    list->list_elem[place - 1].next = FREE;
+    list->list_elem[place].prev = list->list_elem[place - 1].prev;
+    list->list_elem[place - 1].prev = FREE;
 }
