@@ -6,16 +6,18 @@ int main ()
 {
     List list = {};
     ListCtor (&list);
+    ListPush (&list, 1);
+    ListPush (&list, 2);
+    ListPush (&list, 3);
+    ListPush (&list, 4);
+    ListPush (&list, 5);
+    InsertBefore (&list, 1, 33);
+    Delete (&list, 1);
+    InsertBefore (&list, 2, 1);
+    ListPush (&list, 6);
 
-    Insert (&list, 1, 1);
-    Insert (&list, 2, 2);
-    Insert (&list, 3, 3);
-    Insert (&list, 4, 4);
-    Insert (&list, 5, 5);
-    InsertBefore (&list, 10, 3);
-    InsertBefore (&list, 11, 3);
-    Delete (&list, 3);
-
+    DumpListNode(&list);
     ListDump (&list);
+    system ("dot -T png list.dot -o pctr.png");
     ListCtor (&list);
 }
