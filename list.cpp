@@ -79,11 +79,15 @@ void InsertBefore (List* list, int place_before, Elem_list number)
     // случай, когда вставляется перед элемпентом из середины
     list->list_elem[list->head_of_free].data = number;
     list->list_elem[list->head_of_free].next = place_before;
+    // prev от того перед которым вставили
     list->list_elem[list->head_of_free].prev = list->list_elem[place_before].prev;
 
+    // меняем next ячейки перед которой вставили
     list->list_elem[list->list_elem[place_before].prev].next = list->head_of_free;
+    // меняем prev от места до которого вставили
     list->list_elem[place_before].prev = list->head_of_free;
 
+    // элеменнт в который вставили становится занят
     list->list_free_elems[list->head_of_free].data = FILLED_ELEM;
     Elem_list pre_head_of_list = list->head_of_free;
     list->head_of_free = list->list_free_elems[list->head_of_free].next;
@@ -119,7 +123,9 @@ void Delete (List* list, int place)
     }
 
     list->list_elem[place].data = 0; // изначально все нулями заполняет, то есть пустая ячейка
+    // меняется next того после которого удалили
     list->list_elem[list->list_elem[place].prev].next = list->list_elem[place].next;
+    // меняется prev того перед которым удалили
     list->list_elem[list->list_elem[place].next].prev = list->list_elem[place].prev;
     list->list_elem[place].next = NO_CONNECTION;
     list->list_elem[place].prev = NO_CONNECTION;
