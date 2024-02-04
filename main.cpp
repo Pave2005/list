@@ -15,6 +15,8 @@ int main ()
     Delete (&list, 1);
     InsertBefore (&list, 2, 1);
     ListPush (&list, 6);
+    Delete (&list, 2);
+    InsertAfter (&list, 1, 22);
 
     DumpListNode(&list);
     ListDump (&list);

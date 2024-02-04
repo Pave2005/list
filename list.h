@@ -50,6 +50,8 @@ struct List
     Elem_list head_of_free;
 };
 
+void InsertAfter (List* list, int place_after, Elem_list number);
+void ChangingListOfFree (List* list);
 void DumpListNode(List* list_node);
 void ListPush (List* list, Elem_list num);
 void ListDtor (List* list);

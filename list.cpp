@@ -50,6 +50,14 @@ void ListDump (List* list)
     printf ("\n");
 }
 
+void ChangingListOfFree (List* list)
+{
+    list->list_free_elems[list->head_of_free].data = FILLED_ELEM;
+    Elem_list pre_head_of_free = list->head_of_free;
+    list->head_of_free = list->list_free_elems[list->head_of_free].next;
+    list->list_free_elems[pre_head_of_free].next = NO_CONNECTION;
+}
+
 void InsertBefore (List* list, int place_before, Elem_list number)
 {
     if (place_before < 1 || list->list_elem[place_before].prev == NO_CONNECTION)
@@ -70,10 +78,7 @@ void InsertBefore (List* list, int place_before, Elem_list number)
 
         list->list_elem[0].next = list->head;
 
-        list->list_free_elems[list->head_of_free].data = FILLED_ELEM;
-        Elem_list pre_head_of_free = list->head_of_free;
-        list->head_of_free = list->list_free_elems[list->head_of_free].next;
-        list->list_free_elems[list->head_of_free].next = NO_CONNECTION;
+        ChangingListOfFree (list);
         return;
     }
     // случай, когда вставляется перед элемпентом из середины
@@ -88,10 +93,25 @@ void InsertBefore (List* list, int place_before, Elem_list number)
     list->list_elem[place_before].prev = list->head_of_free;
 
     // элеменнт в который вставили становится занят
-    list->list_free_elems[list->head_of_free].data = FILLED_ELEM;
-    Elem_list pre_head_of_list = list->head_of_free;
-    list->head_of_free = list->list_free_elems[list->head_of_free].next;
-    list->list_free_elems[pre_head_of_list].next = NO_CONNECTION;
+    ChangingListOfFree (list);
+}
+
+void InsertAfter (List* list, int place_after, Elem_list number)
+{
+    if (place_after < 1 || list->list_elem[place_after].prev == NO_CONNECTION)
+    {
+        printf ("The element cannot be inserted into this place!\n");
+        return;
+    }
+
+    list->list_elem[list->head_of_free].data = number;
+    list->list_elem[list->head_of_free].next = list->list_elem[place_after].next;
+    list->list_elem[list->head_of_free].prev = place_after;
+
+    list->list_elem[list->list_elem[place_after].next].prev = list->head_of_free;
+    list->list_elem[place_after].next = list->head_of_free;
+
+    ChangingListOfFree (list);
 }
 
 void ListPush (List* list, Elem_list number)
@@ -108,10 +128,7 @@ void ListPush (List* list, Elem_list number)
         list->head = 1;
     }
 
-    list->list_free_elems[list->head_of_free].data = FILLED_ELEM;
-    Elem_list pre_head = list->head_of_free;
-    list->head_of_free = list->list_free_elems[list->head_of_free].next;
-    list->list_free_elems[pre_head].next = NO_CONNECTION;
+    ChangingListOfFree (list);
 }
 
 void Delete (List* list, int place)
